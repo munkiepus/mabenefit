@@ -1,12 +1,17 @@
 // barchartrace.js
-const margin = { top: 60, right: 30, bottom: 50, left: 250 };
+const margin = { top: 70, right: 150, bottom: 120, left: 150 };
 const width = 960 - margin.left - margin.right;
 const height = 600 - margin.top - margin.bottom;
-const barHeight = 45;  // Fixed bar height
-const logoSize = 40;  // Size of the logos
-const maxBars = Math.floor(height / barHeight);  // Maximum number of bars that fit in the height
+const barHeight = 45;
+const logoSize = 40;
+const maxBars = Math.floor(height / barHeight);
 
-const svg = d3.select("#chart").append("svg")
+const chartDiv = d3.select("#chart")
+    .style("background-image", `url(https://raw.githubusercontent.com/munkiepus/mabenefit/main/Background.png)`)
+    .style("background-size", "cover")
+    .style("background-repeat", "no-repeat");
+
+const svg = chartDiv.append("svg")
     .attr("width", 960)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
@@ -15,25 +20,39 @@ const svg = d3.select("#chart").append("svg")
 const x = d3.scaleLinear().range([0, width]);
 const y = d3.scaleBand().range([0, height]).padding(0.1);
 
-const xAxis = d3.axisBottom(x).tickFormat(d => d3.format(".2s")(d).replace("G", "B"));
+const xAxis = d3.axisBottom(x)
+    .tickFormat(d => d3.format(".2s")(d).replace("G", "B"))
+    .tickSizeOuter(0)
+    .tickPadding(15);
 
 const gX = svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", `translate(0, ${height})`);
+    .attr("transform", `translate(0, ${height})`)
+    .style("color", "white")
+    .style("font-size", "14px")
+    .style("font-weight", "bold")
+    .call(xAxis);
 
-svg.append("text")
+const xAxisLabel = svg.append("text")
     .attr("class", "x label")
-    .attr("text-anchor", "end")
-    .attr("x", width)
-    .attr("y", height + margin.bottom - 10)
-    .text("Impact MA to 0 on SCR (in Millions)");
+    .attr("text-anchor", "middle")
+    .attr("x", width / 2)
+    .attr("y", height + margin.bottom - 40)
+    .style("fill", "white")
+    .style("font-size", "18px")
+    .style("font-weight", "bold")
+    .style("text-shadow", "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black")
+    .text("MA impact on SCR");
 
-// Add dynamic year text
 const yearLabel = svg.append("text")
     .attr("class", "year")
     .attr("x", width / 2)
     .attr("y", -20)
-    .attr("text-anchor", "middle");
+    .attr("text-anchor", "middle")
+    .style("fill", "white")
+    .style("font-size", "24px")
+    .style("font-weight", "bold")
+    .style("text-shadow", "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black");
 
 d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv").then(data => {
     data.forEach(d => {
@@ -45,13 +64,17 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
         .map(([year, values]) => ({
             year: year,
             values: values.sort((a, b) => b["Impact MA to 0 on SCR"] - a["Impact MA to 0 on SCR"]).slice(0, maxBars)
-        }));
+        }))
+        .sort((a, b) => a.year - b.year);
+
+    let index = 0;
+    let timer;
 
     const update = (data) => {
         x.domain([0, d3.max(data.values, d => d["Impact MA to 0 on SCR"])]);
         y.domain(data.values.map(d => d["Firm Short"])).range([0, data.values.length * barHeight]);
 
-        gX.transition().duration(750).call(xAxis);
+        gX.transition().duration(1600).call(xAxis);
 
         const bars = svg.selectAll(".bar")
             .data(data.values, d => d["Firm Short"]);
@@ -63,44 +86,64 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
             .attr("transform", d => `translate(0, ${y(d["Firm Short"])})`);
 
         barsEnter.append("rect")
-            .attr("x", logoSize + 5)  // Offset to make room for the logo
-            .attr("width", d => x(d["Impact MA to 0 on SCR"]))
+            .attr("x", logoSize + 5)
+            .attr("width", 0)
             .attr("height", barHeight - 5)
-            .attr("fill", d => d["Colour"]);
+            .style("stroke", "white")
+            .style("stroke-width", "1px");
 
         barsEnter.append("image")
             .attr("xlink:href", d => `https://raw.githubusercontent.com/munkiepus/mabenefit/main/icons/${d["Firm Short"]}.png`)
-            .attr("x", 0)  // Position the logo at the start
+            .attr("x", 0)
             .attr("y", (barHeight - logoSize) / 2)
             .attr("width", logoSize)
             .attr("height", logoSize);
 
         barsEnter.append("text")
-            .attr("x", d => x(d["Impact MA to 0 on SCR"]) + logoSize + 10)  // Position text after the bar and logo
+            .attr("class", "value-label")
+            .attr("x", logoSize + 75)
             .attr("y", (barHeight - 5) / 2)
             .attr("dy", ".35em")
-            .text(d => `${d3.format(",.1f")(d["Impact MA to 0 on SCR"] / 1e6)}M`);
+            .attr("text-anchor", "start")
+            .style("fill", "white")
+            .style("font-size", "14px")
+            .style("font-weight", "bold")
+            .style("text-shadow", "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black");
 
         const barsUpdate = barsEnter.merge(bars);
 
-        barsUpdate.transition().duration(750)
+        barsUpdate.transition().duration(1600)
             .attr("transform", d => `translate(0, ${y(d["Firm Short"])})`);
 
         barsUpdate.select("rect")
-            .transition().duration(750)
-            .attr("width", d => x(d["Impact MA to 0 on SCR"]));
+            .transition().duration(1600)
+            .attr("width", d => x(d["Impact MA to 0 on SCR"]))
+            .style("fill", d => d.Colour);
 
-        barsUpdate.select("text")
-            .transition().duration(750)
-            .attr("x", d => x(d["Impact MA to 0 on SCR"]) + logoSize + 10);
+        barsUpdate.select(".value-label")
+            .transition().duration(1600)
+            .attr("x", d => x(d["Impact MA to 0 on SCR"]) + logoSize + 75)
+            .text(d => `${d3.format(",.1f")(d["Impact MA to 0 on SCR"] / 1e6)}M`);
 
-        // Update the year label
-        yearLabel.transition().duration(750).text(data.year);
+        yearLabel.transition().duration(1600).text(data.year);
     };
 
-    let index = 0;
-    const timer = d3.interval(() => {
-        update(nestedData[index]);
-        index = (index + 1) % nestedData.length;
-    }, 2000);
+    const startAnimation = () => {
+        index = 0;
+        timer = d3.interval(() => {
+            update(nestedData[index]);
+            index++;
+            if (index === nestedData.length) {
+                timer.stop();
+            }
+        }, 3000);
+    };
+
+    // Initial update to start the animation at the earliest year
+    update(nestedData[0]);
+
+    // Start animation 3 seconds after page load
+    setTimeout(() => {
+        startAnimation();
+    }, 3000);
 });
