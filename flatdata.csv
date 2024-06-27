@@ -58,14 +58,14 @@
 #EEC62B,16116598221,2021-12-31 00:00:00,PIC,6116598221,611659,PIC SFCR 2021,,2021-01-01 00:00:00,2021
 #EEC62B,14171766780,2022-12-31 00:00:00,PIC,4171766780,417176,PIC SFCR 2022,,2022-01-01 00:00:00,2022
 #EEC62B,15346243154,2023-12-31 00:00:00,PIC,5346243154,534624,PIC SFCR 2023,,2023-01-01 00:00:00,2023
-#F4DA30,16535908000,2016-12-31 00:00:00,Avi,6535908000,653590,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2016/Aviva_plc_Group_SFCR_31_December_2016.pdf,,2016-01-01 00:00:00,2016
-#F4DA30,15894416000,2017-12-31 00:00:00,Avi,5894416000,589441,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2017/Solvency-FCR-2017.pdf,,2017-01-01 00:00:00,2017
-#F4DA30,15356850000,2018-12-31 00:00:00,Avi,5356850000,535685,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2018/aviva-plc-group-sfcr.pdf,,2018-01-01 00:00:00,2018
-#F4DA30,16693961000,2019-12-31 00:00:00,Avi,6693961000,669396,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2019/31%20Dec%202019%20-%20Aviva%20plc%20Group%20SFCR.pdf,,2019-01-01 00:00:00,2019
-#F4DA30,17001036000,2020-12-31 00:00:00,Avi,7001036000,700103,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2020/aviva-plc-group-sfcr-2020.pdf,,2020-01-01 00:00:00,2020
-#F4DA30,16207500000,2021-12-31 00:00:00,Avi,6207500000,620750,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2021/31%20Dec%2021%20Aviva%20plc%20Group%20SFCR.pdf,,2021-01-01 00:00:00,2021
-#F4DA30,14630186000,2022-12-31 00:00:00,Avi,4630186000,463018,31 Dec 22 Aviva plc Group SFCR (4).pdf,,2022-01-01 00:00:00,2022
-#F4DA30,15438885000,2023-12-31 00:00:00,Avi,5438885000,543888,Aviva-plc-Single-Group-wide-SFCR-2023 (1).pdf,,2023-01-01 00:00:00,2023
+#59b237,16535908000,2016-12-31 00:00:00,Avi,6535908000,653590,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2016/Aviva_plc_Group_SFCR_31_December_2016.pdf,,2016-01-01 00:00:00,2016
+#59b237,15894416000,2017-12-31 00:00:00,Avi,5894416000,589441,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2017/Solvency-FCR-2017.pdf,,2017-01-01 00:00:00,2017
+#59b237,15356850000,2018-12-31 00:00:00,Avi,5356850000,535685,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2018/aviva-plc-group-sfcr.pdf,,2018-01-01 00:00:00,2018
+#59b237,16693961000,2019-12-31 00:00:00,Avi,6693961000,669396,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2019/31%20Dec%202019%20-%20Aviva%20plc%20Group%20SFCR.pdf,,2019-01-01 00:00:00,2019
+#59b237,17001036000,2020-12-31 00:00:00,Avi,7001036000,700103,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2020/aviva-plc-group-sfcr-2020.pdf,,2020-01-01 00:00:00,2020
+#59b237,16207500000,2021-12-31 00:00:00,Avi,6207500000,620750,https://static.aviva.io/content/dam/aviva-corporate/documents/investors/pdfs/regulatoryreturns/2021/31%20Dec%2021%20Aviva%20plc%20Group%20SFCR.pdf,,2021-01-01 00:00:00,2021
+#59b237,14630186000,2022-12-31 00:00:00,Avi,4630186000,463018,31 Dec 22 Aviva plc Group SFCR (4).pdf,,2022-01-01 00:00:00,2022
+#59b237,15438885000,2023-12-31 00:00:00,Avi,5438885000,543888,Aviva-plc-Single-Group-wide-SFCR-2023 (1).pdf,,2023-01-01 00:00:00,2023
 #40c1ab,10866613000,2016-12-31 00:00:00,Rot,866613000,86661,Rothesay SFCR 2016,,2016-01-01 00:00:00,2016
 #40c1ab,10743104000,2017-12-31 00:00:00,Rot,743104000,74310,Rothesay SFCR 2017,Acquired Zurich and Aegon,2017-01-01 00:00:00,2017
 #40c1ab,14088073000,2018-12-31 00:00:00,Rot,4088073000,408807,Rothesay SFCR 2018,Pru deal,2018-01-01 00:00:00,2018
