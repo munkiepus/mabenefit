@@ -3,19 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3 Animated Swarm Chart MA benefit</title>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <title>Bar Chart Race</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: sans-serif;
         }
-        .axis path, .axis line {
-            fill: none;
-            shape-rendering: crispEdges;
+        .bar {
+            fill-opacity: 0.8;
+        }
+        .bar text {
+            fill: white;
+            font: 10px sans-serif;
+            text-anchor: end;
         }
     </style>
 </head>
 <body>
-    <script src="swarm_chart.js"></script>
+    <div id="chart"></div>
+    <script src="barchartrace.js"></script>
 </body>
 </html>
