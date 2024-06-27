@@ -2,10 +2,13 @@
 const margin = { top: 60, right: 30, bottom: 50, left: 250 };
 const width = 960 - margin.left - margin.right;
 const height = 600 - margin.top - margin.bottom;
+const barHeight = 45;  // Fixed bar height
+const logoSize = 40;  // Size of the logos
+const maxBars = Math.floor(height / barHeight);  // Maximum number of bars that fit in the height
 
 const svg = d3.select("#chart").append("svg")
     .attr("width", 960)
-    .attr("height", 600)
+    .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
@@ -41,12 +44,12 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
     const nestedData = d3.groups(data, d => d.Year)
         .map(([year, values]) => ({
             year: year,
-            values: values.sort((a, b) => b["Impact MA to 0 on SCR"] - a["Impact MA to 0 on SCR"])
+            values: values.sort((a, b) => b["Impact MA to 0 on SCR"] - a["Impact MA to 0 on SCR"]).slice(0, maxBars)
         }));
 
     const update = (data) => {
         x.domain([0, d3.max(data.values, d => d["Impact MA to 0 on SCR"])]);
-        y.domain(data.values.map(d => d["Firm Short"]));
+        y.domain(data.values.map(d => d["Firm Short"])).range([0, data.values.length * barHeight]);
 
         gX.transition().duration(750).call(xAxis);
 
@@ -60,16 +63,23 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
             .attr("transform", d => `translate(0, ${y(d["Firm Short"])})`);
 
         barsEnter.append("rect")
-            .attr("x", 0)
+            .attr("x", logoSize + 5)  // Offset to make room for the logo
             .attr("width", d => x(d["Impact MA to 0 on SCR"]))
-            .attr("height", y.bandwidth())
+            .attr("height", barHeight - 5)
             .attr("fill", d => d["Colour"]);
 
+        barsEnter.append("image")
+            .attr("xlink:href", d => `https://raw.githubusercontent.com/munkiepus/mabenefit/main/icons/${d["Firm Short"]}.png`)
+            .attr("x", 0)  // Position the logo at the start
+            .attr("y", (barHeight - logoSize) / 2)
+            .attr("width", logoSize)
+            .attr("height", logoSize);
+
         barsEnter.append("text")
-            .attr("x", d => x(d["Impact MA to 0 on SCR"]) - 5)
-            .attr("y", y.bandwidth() / 2)
+            .attr("x", d => x(d["Impact MA to 0 on SCR"]) + logoSize + 10)  // Position text after the bar and logo
+            .attr("y", (barHeight - 5) / 2)
             .attr("dy", ".35em")
-            .text(d => d["Firm Short"]);
+            .text(d => `${d3.format(",.1f")(d["Impact MA to 0 on SCR"] / 1e6)}M`);
 
         const barsUpdate = barsEnter.merge(bars);
 
@@ -82,7 +92,7 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
 
         barsUpdate.select("text")
             .transition().duration(750)
-            .attr("x", d => x(d["Impact MA to 0 on SCR"]) - 5);
+            .attr("x", d => x(d["Impact MA to 0 on SCR"]) + logoSize + 10);
 
         // Update the year label
         yearLabel.transition().duration(750).text(data.year);
