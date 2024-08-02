@@ -79,7 +79,7 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
 
         gX.transition()
             .duration(500)
-            .ease(d3.easeCubic)
+            .ease(d3.easeCubicInOut)
             .call(xAxis);
 
         const bars = svg.selectAll(".bar")
@@ -120,26 +120,26 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
 
         barsUpdate.transition()
             .duration(500)
-            .ease(d3.easeCubic)
+            .ease(d3.easeCubicInOut)
             .attr("transform", d => `translate(0, ${y(d["Firm Short"])})`);
 
         barsUpdate.select("rect")
             .transition()
             .duration(500)
-            .ease(d3.easeCubic)
+            .ease(d3.easeCubicInOut)
             .attr("width", d => x(d["Impact MA to 0 on SCR"]))
             .style("fill", d => d.Colour);
 
         barsUpdate.select(".value-label")
             .transition()
             .duration(500)
-            .ease(d3.easeCubic)
+            .ease(d3.easeCubicInOut)
             .attr("x", d => x(d["Impact MA to 0 on SCR"]) + logoSize + 75)
             .text(d => `${d3.format(",.1f")(d["Impact MA to 0 on SCR"] / 1e6)}M`);
 
         yearLabel.transition()
             .duration(500)
-            .ease(d3.easeCubic)
+            .ease(d3.easeCubicInOut)
             .text(`${data.yearMonth.getFullYear()}`);
     };
 
@@ -151,7 +151,7 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
             if (index === nestedData.length) {
                 timer.stop();
             }
-        }, 300);
+        }, 400);
     };
 
     // Initial update to start the animation at the earliest year
