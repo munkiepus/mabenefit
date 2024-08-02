@@ -3,48 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MA impact on SCR - Bar Chart Race</title>
+    <title>Bar Chart Race</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <style>
         body {
             background-color: #172035;
-            color: white;
+            margin: 0;
             font-family: Arial, sans-serif;
         }
         #chart {
-            width: 1200px;
-            margin: 0 auto;
-        }
-        #chart {
             position: relative;
+            width: 1200px;
+            margin: auto;
         }
-        #playButton {
+        img.logo {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        body {
-            font-family: sans-serif;
-        }
-        .bar {
-            fill-opacity: 0.8;
-        }
-        .bar text {
-            fill: white;
-            font: 10px sans-serif;
-            text-anchor: end;
+            top: 30px;
+            left: 150px;
+            width: 150px; /* Adjust size as needed */
         }
     </style>
 </head>
 <body>
+    <img src="https://raw.githubusercontent.com/munkiepus/mabenefit/main/fredward-logo.png" alt="Logo" class="logo">
     <div id="chart"></div>
-    <!--<button id="playButton">Play</button>-->
     <script src="barchartrace.js"></script>
 </body>
 </html>
