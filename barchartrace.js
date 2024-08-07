@@ -14,7 +14,7 @@ const svg = chartDiv.append("svg")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
 const x = d3.scaleLinear().range([0, width]);
-const y = d3.scaleBand().range([0, height]).padding(0.15); // Increased padding for more vertical space
+const y = d3.scaleBand().range([0, height]).padding(0.1); // Set padding to 10% of bar height
 
 const xAxis = d3.axisBottom(x)
     .tickFormat(d => d3.format(".2s")(d).replace("G", "B"))
@@ -73,10 +73,10 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
     let timer;
 
     const update = (data) => {
-        const barHeight = height / data.values.length;  // Calculate bar height based on available space and number of bars
-        const logoHeight = barHeight * 0.9; // Set logo height to 90% of bar height
+        const barHeight = height / (data.values.length + 1);  // Add space for x-axis
+        const logoHeight = barHeight * 0.8; // Set logo height to 90% of bar height
 
-        y.domain(data.values.map(d => d["Firm Short"])).range([0, data.values.length * barHeight]);
+        y.domain(data.values.map(d => d["Firm Short"])).range([0, data.values.length * (barHeight * 1.1)]); // Increase range by 10%
 
         gX.transition()
             .duration(500)
