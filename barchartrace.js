@@ -1,22 +1,20 @@
 // barchartrace.js
 const margin = { top: 70, right: 150, bottom: 120, left: 150 };
-const fullWidth = 1200;
+const fullWidth = 1000;  // Set full width to 1000
+const fullHeight = 1000;  // Set full height to 1000
 const width = fullWidth - margin.left - margin.right;
-const height = 600 - margin.top - margin.bottom;
-const barHeight = 45;
-const logoSize = 40;
-const maxBars = Math.floor(height / barHeight);
+const height = fullHeight - margin.top - margin.bottom;
 
 const chartDiv = d3.select("#chart");
 
 const svg = chartDiv.append("svg")
     .attr("width", fullWidth)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("height", fullHeight)
     .append("g")
     .attr("transform", `translate(${margin.left},${margin.top})`);
 
 const x = d3.scaleLinear().range([0, width]);
-const y = d3.scaleBand().range([0, height]).padding(0.1);
+const y = d3.scaleBand().range([0, height]).padding(0.15); // Increased padding for more vertical space
 
 const xAxis = d3.axisBottom(x)
     .tickFormat(d => d3.format(".2s")(d).replace("G", "B"))
@@ -27,7 +25,7 @@ const gX = svg.append("g")
     .attr("class", "x axis")
     .attr("transform", `translate(0, ${height})`)
     .style("color", "white")
-    .style("font-size", "14px")
+    .style("font-size", "24px")  // Update font size to 24px for x-axis scale
     .style("font-weight", "bold")
     .call(xAxis);
 
@@ -37,7 +35,7 @@ const xAxisLabel = svg.append("text")
     .attr("x", width / 2)
     .attr("y", height + margin.bottom - 40)
     .style("fill", "white")
-    .style("font-size", "18px")
+    .style("font-size", "32px")  // Keep font size at 32px for x-axis label
     .style("font-weight", "bold")
     .style("text-shadow", "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black")
     .text("MA impact on SCR");
@@ -48,7 +46,7 @@ const yearLabel = svg.append("text")
     .attr("y", -20)
     .attr("text-anchor", "middle")
     .style("fill", "white")
-    .style("font-size", "24px")
+    .style("font-size", "32px")  // Update font size to 32px for year label
     .style("font-weight", "bold")
     .style("text-shadow", "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black");
 
@@ -65,7 +63,7 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
     const nestedData = d3.groups(data, d => `${d.Year}-${d.Month}`)
         .map(([yearMonth, values]) => ({
             yearMonth: values[0].date,
-            values: values.sort((a, b) => b["Impact MA to 0 on SCR"] - a["Impact MA to 0 on SCR"]).slice(0, maxBars)
+            values: values.sort((a, b) => b["Impact MA to 0 on SCR"] - a["Impact MA to 0 on SCR"])
         }))
         .sort((a, b) => a.yearMonth - b.yearMonth);
 
@@ -75,6 +73,9 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
     let timer;
 
     const update = (data) => {
+        const barHeight = height / data.values.length;  // Calculate bar height based on available space and number of bars
+        const logoHeight = barHeight * 0.9; // Set logo height to 90% of bar height
+
         y.domain(data.values.map(d => d["Firm Short"])).range([0, data.values.length * barHeight]);
 
         gX.transition()
@@ -92,7 +93,7 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
             .attr("transform", d => `translate(0, ${y(d["Firm Short"])})`);
 
         barsEnter.append("rect")
-            .attr("x", logoSize + 5)
+            .attr("x", logoHeight + 5)
             .attr("width", 0)
             .attr("height", barHeight - 5)
             .style("stroke", "white")
@@ -101,18 +102,18 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
         barsEnter.append("image")
             .attr("xlink:href", d => `https://raw.githubusercontent.com/munkiepus/mabenefit/main/icons/${d["Firm Short"]}.png`)
             .attr("x", 0)
-            .attr("y", (barHeight - logoSize) / 2)
-            .attr("width", logoSize)
-            .attr("height", logoSize);
+            .attr("y", (barHeight - logoHeight) / 2) // Center the logo vertically in the bar
+            .attr("width", logoHeight) // Use logoHeight for width
+            .attr("height", logoHeight); // Use logoHeight for height
 
         barsEnter.append("text")
             .attr("class", "value-label")
-            .attr("x", logoSize + 75)
+            .attr("x", d => x(d["Impact MA to 0 on SCR"]) + 100) // Space to the right of the bar
             .attr("y", (barHeight - 5) / 2)
             .attr("dy", ".35em")
             .attr("text-anchor", "start")
             .style("fill", "white")
-            .style("font-size", "14px")
+            .style("font-size", "24px")
             .style("font-weight", "bold")
             .style("text-shadow", "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black");
 
@@ -128,13 +129,15 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
             .duration(500)
             .ease(d3.easeCubicInOut)
             .attr("width", d => x(d["Impact MA to 0 on SCR"]))
+            .attr("height", barHeight - 5)
             .style("fill", d => d.Colour);
 
         barsUpdate.select(".value-label")
             .transition()
             .duration(500)
             .ease(d3.easeCubicInOut)
-            .attr("x", d => x(d["Impact MA to 0 on SCR"]) + logoSize + 75)
+            .attr("x", d => x(d["Impact MA to 0 on SCR"]) + 100) // Space to the right of the bar
+            .attr("y", (barHeight - 5) / 2)
             .text(d => `${d3.format(",.1f")(d["Impact MA to 0 on SCR"] / 1e6)}M`);
 
         yearLabel.transition()
@@ -150,6 +153,17 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
             index++;
             if (index === nestedData.length) {
                 timer.stop();
+            } else if (nestedData[index - 1].yearMonth.getMonth() === 11) {  // December
+                timer.stop();
+                setTimeout(() => {
+                    timer.restart(() => {
+                        update(nestedData[index]);
+                        index++;
+                        if (index === nestedData.length) {
+                            timer.stop();
+                        }
+                    }, 400);
+                }, 2000);  // 2000ms delay
             }
         }, 400);
     };
