@@ -1,6 +1,6 @@
 // barchartrace.js
 const margin = { top: 70, right: 150, bottom: 120, left: 150 };
-const fullWidth = 1000;  // Set full width to 1000
+const fullWidth = 1200;  // Set full width to 1000
 const fullHeight = 1000;  // Set full height to 1000
 const width = fullWidth - margin.left - margin.right;
 const height = fullHeight - margin.top - margin.bottom;
@@ -17,7 +17,7 @@ const x = d3.scaleLinear().range([0, width]);
 const y = d3.scaleBand().range([0, height]).padding(0.1); // Set padding to 10% of bar height
 
 const xAxis = d3.axisBottom(x)
-    .tickFormat(d => d3.format(".2s")(d).replace("G", "B"))
+    .tickFormat(d => `£${d3.format(".2s")(d).replace("G", "B").replace(".0", "")}`)
     .tickSizeOuter(0)
     .tickPadding(15);
 
@@ -35,10 +35,10 @@ const xAxisLabel = svg.append("text")
     .attr("x", width / 2)
     .attr("y", height + margin.bottom - 40)
     .style("fill", "white")
-    .style("font-size", "32px")  // Keep font size at 32px for x-axis label
+    .style("font-size", "24px")  // Font size for x-axis label
     .style("font-weight", "bold")
     .style("text-shadow", "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black")
-    .text("MA impact on SCR");
+    .text("Impact on SCR of setting MA to zero (R0090)"); // Updated x-axis title
 
 const yearLabel = svg.append("text")
     .attr("class", "year")
@@ -46,7 +46,7 @@ const yearLabel = svg.append("text")
     .attr("y", -20)
     .attr("text-anchor", "middle")
     .style("fill", "white")
-    .style("font-size", "32px")  // Update font size to 32px for year label
+    .style("font-size", "42px") // Set the font size to 42px
     .style("font-weight", "bold")
     .style("text-shadow", "-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black");
 
@@ -74,7 +74,7 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
 
     const update = (data) => {
         const barHeight = height / (data.values.length + 1);  // Add space for x-axis
-        const logoHeight = barHeight * 0.8; // Set logo height to 90% of bar height
+        const logoHeight = barHeight * 0.8; // Set logo height to 80% of bar height
 
         y.domain(data.values.map(d => d["Firm Short"])).range([0, data.values.length * (barHeight * 1.1)]); // Increase range by 10%
 
@@ -138,7 +138,7 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
             .ease(d3.easeCubicInOut)
             .attr("x", d => x(d["Impact MA to 0 on SCR"]) + 100) // Space to the right of the bar
             .attr("y", (barHeight - 5) / 2)
-            .text(d => `${d3.format(",.1f")(d["Impact MA to 0 on SCR"] / 1e6)}M`);
+            .text(d => `£${d3.format(",.0f")(d["Impact MA to 0 on SCR"] / 1e6)}M`); // Add "£" and format with commas
 
         yearLabel.transition()
             .duration(500)
