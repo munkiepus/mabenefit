@@ -147,25 +147,39 @@ d3.csv("https://raw.githubusercontent.com/munkiepus/mabenefit/main/flatdata.csv"
     };
 
     const startAnimation = () => {
-        index = 0;
-        timer = d3.interval(() => {
-            update(nestedData[index]);
-            index++;
-            if (index === nestedData.length) {
-                timer.stop();
-            } else if (nestedData[index - 1].yearMonth.getMonth() === 11) {  // December
-                timer.stop();
-                setTimeout(() => {
-                    timer.restart(() => {
-                        update(nestedData[index]);
-                        index++;
-                        if (index === nestedData.length) {
-                            timer.stop();
-                        }
-                    }, 400);
-                }, 2000);  // 2000ms delay
+        index = 0; // Start at the first index
+        const delay = 500; // Pause duration for December in milliseconds
+        const yearDelay = 3000; // Delay between year transitions in milliseconds
+
+        const animate = () => {
+            // Check if the current index is within the bounds
+            if (index < nestedData.length) {
+                const currentData = nestedData[index];
+                update(currentData); // Update the chart with the current data
+
+                // Get the month from yearMonth
+                const month = new Date(currentData.yearMonth).getMonth(); // Get month from date
+
+                // Increment the index for the next iteration
+                index++;
+
+                // Check if the current month is December (11)
+                if (month === 11) {
+                    // Pause before continuing
+                    setTimeout(() => {
+                        animate(); // Continue the animation after the pause
+                    }, yearDelay);
+                } else {
+                    // Continue with normal interval between year transitions
+                    setTimeout(animate, delay); // Use yearDelay for normal transitions
+                }
+            } else {
+                // Stop the animation when the end of the data is reached
+                console.log("Animation complete.");
             }
-        }, 400);
+        };
+
+        animate(); // Start the animation loop
     };
 
     // Initial update to start the animation at the earliest year
